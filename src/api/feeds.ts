@@ -66,6 +66,8 @@ export interface Dump {
   links: Link[]
   id: string
   author?: string
+  title: string
+  updated: Date
   text: string
   type: string
 }
@@ -128,23 +130,25 @@ const parseFeeds = (body: string): Feed[] => {
 const parseDumps = (body: string): DumpsFeed => {
   const raw = fullParse(body, {
     removeNSPrefix: true,
-    processEntities: { enabled: true }
+    // dump 摘要内嵌整段 HTML（转义实体上千属正常内容），默认实体展开上限
+    // 1000 恰好卡在典型 dump 体积附近——时好时坏的根源，这里放大预算
+    processEntities: { enabled: true, maxTotalExpansions: 1000000 }
   })?.feed
   const { href } = xmlNodeAttr(raw?.link)
   const { title, updated } = raw
   const dumps = xmlArray(raw, "entry").map((e: any) => {
-    const {
-      category,
-      id,
-      author: { name: author },
-      summary: { "#text": text, "@_type": type }
-    } = e
+    const category = xmlArray(e, "category").map(xmlNodeAttr)
     const links = xmlArray(e, "link").map(xmlNodeAttr)
+    // author/summary 并非每个 entry 必有，缺省解构会抛 TypeError
+    const author = e.author?.name
+    const { "#text": text = "", "@_type": type = "" } = e.summary ?? {}
     return {
-      categories: category.map(xmlNodeAttr),
+      categories: category,
       links,
-      id,
+      id: e.id,
       author,
+      title: e.title,
+      updated: parseJsonDate(e.updated),
       text: text,
       type
     }
@@ -163,8 +167,18 @@ export async function feeds(h: AdtHTTP) {
 
 export async function dumps(h: AdtHTTP, query: string = "") {
   const headers = { Accept: "application/atom+xml;type=feed" }
-  const qs: any = {}
-  if (query) qs["$query"] = query
+  // dumps 端点收普通查询参数（maxNumber / from / user...），不认 $query——
+  // 调用方给的 "maxNumber=5&from=..." 原样拆开透传，别包进 $query
+  const qs: Record<string, string> = {}
+  for (const pair of query.replace(/^\?/, "").split("&")) {
+    if (!pair) continue
+    const eq = pair.indexOf("=")
+    if (eq < 0) qs[decodeURIComponent(pair)] = ""
+    else
+      qs[decodeURIComponent(pair.slice(0, eq))] = decodeURIComponent(
+        pair.slice(eq + 1)
+      )
+  }
   const response = await h.request("/sap/bc/adt/runtime/dumps", {
     method: "GET",
     qs,

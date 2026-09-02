@@ -1,7 +1,12 @@
 {
   "name": "abap-adt-api",
-  "version": "8.4.1",
+  "version": "1.0.1",
   "description": "Interface to Abap Developer Tools webservice",
+  "publishConfig": {
+    "name": "@lingc-sun/abap-adt-api",
+    "access": "public",
+    "registry": "https://registry.npmjs.org/"
+  },
   "outDir": "build",
   "main": "build/index.js",
   "types": "build/index.d.ts",
