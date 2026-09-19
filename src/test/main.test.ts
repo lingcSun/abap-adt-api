@@ -9,6 +9,7 @@ import {
   isClassStructure,
   isHttpError,
   isLoginError,
+  isCsrfError,
   objectPath,
   UnitTestAlertKind
 } from "../"
@@ -1759,6 +1760,25 @@ test("fromException preserves HttpClientException status when a response without
   expect(isHttpError(ex) && ex.status).toBe(404)
   expect(isHttpError(ex) && ex.code).toBe("ERR_NETWORK")
   expect(isHttpError(ex) && ex.message).toBe("Request failed without response")
+})
+
+test("fromException classifies a bare 400 without ICM headers as session expiry", () => {
+  const responseError = new HttpClientException(
+    "Request failed with status code 400",
+    "ERR_BAD_REQUEST",
+    400,
+    undefined,
+    { url: "" },
+    {
+      body: "Session timed out",
+      status: 400,
+      statusText: "Bad Request",
+      headers: { "content-type": "text/plain" }
+    }
+  )
+
+  const ex = fromException(responseError)
+  expect(isCsrfError(ex)).toBe(true)
 })
 
 test(

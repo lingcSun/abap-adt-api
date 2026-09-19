@@ -178,7 +178,12 @@ const isCsrfException = (r: HttpClientResponse) =>
   // expired-session POSTs come back as 400; the statusText wording varies
   // ("Session timed out", localized variants) — treat any bare 400 whose
   // body is not an ADT exception XML as a session refresh candidate
-  (r.status === 400 && !r.body?.match(/exc:exception/)) // hack to get login refresh to work on expired sessions
+  (r.status === 400 &&
+    // ICM error pages are also bare 400s, but upstream contract preserves
+    // the HttpClientException status/code for them; only ICM sets these
+    !r.headers["x-sap-icm-err-id"] &&
+    !r.headers["sap-err-id"] &&
+    !r.body?.match(/exc:exception/))
 
 export const fromResponse = (data: string, response: HttpClientResponse) => {
   // CSRF/session-expired classification must precede the empty-body
