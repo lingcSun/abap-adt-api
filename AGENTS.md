@@ -1,6 +1,6 @@
 # abap-adt-api — Agent Instructions
 
-TypeScript client library for SAP's ABAP Developer Tools (ADT) REST API. Primary consumer is the [vscode_abap_remote_fs](https://github.com/marcellourbani/vscode_abap_remote_fs) extension.
+TypeScript client library for SAP's ABAP Developer Tools (ADT) REST API. Fork of [marcellourbani/abap-adt-api](https://github.com/marcellourbani/abap-adt-api), published as `@lingc-sun/abap-adt-api`; upstream consumer [vscode_abap_remote_fs](https://github.com/marcellourbani/vscode_abap_remote_fs), fork consumer [mcp-abap-adt](../mcp-abap-adt).
 
 ## Commands
 
@@ -81,3 +81,13 @@ Set `ADT_ENABLE_ALL=YES` to enable destructive tests (create/delete objects, rel
 ## Output
 
 Compiled JS and `.d.ts` files go to `build/` (gitignored). Never edit files in `build/` directly.
+
+## Fork Invariants
+
+- **Fork 补丁少而聚焦**：一个提交只修一个行为缺陷，根因写全在提交信息里，便于上游合入后对冲（[rationale](.agents/notes/implemented/process/2026-09-18-fork-maintenance-policy.md)）。
+- **版本号跟随上游 tag**（8.4.x）：依赖范围永远可读为"上游某版 + fork 补丁"；merge 上游后必须重验 fork 补丁仍然生效（[rationale](.agents/notes/implemented/process/2026-09-18-fork-maintenance-policy.md)）。
+
+## Agent Notes
+
+Fork 维护政策与决策记录在 [.agents/notes/](.agents/notes/AGENTS.md)。非平凡变更必须在同一提交新增或更新至少一篇 Agent Note（[规则](.agents/notes/README.md#何时必须写)）；每篇新笔记触发 supersession 检查。写服务端行为断言时用 [test-dont-assume](.agents/skills/test-dont-assume/SKILL.md) 技能。
+
