@@ -28,8 +28,9 @@ npm test        # jest；未配置 ADT_URL 时集成测试自动跳过
 - 外部响应校验用 io-ts codec；错误判别用 `isAdtError()` / `isHttpError()` / `isLoginError()`，抛 `AdtErrorException`。
 - 类型 PascalCase 无 `I` 前缀；不用 enum，用 const 对象或 union。
 - 测试细则（setenv.js 模板、runTest 助手、testdata 样本、破坏性测试开关）见 [README Testing](README.md#testing)。
+- **npm 版本**：API 语义 semver——新端点/新类型 → minor，修复 → patch，破坏性 → major；fork 发布号跟随上游 tag 递增第三位。release commit（`chore(release): x.y.z`）集中版本号与 CHANGELOG，build+test 全绿后 publish 到 npmjs（[checklist](.agents/notes/implemented/process/2026-09-19-npm-release-versioning.md)）。
 
-本文件预算 ≤ 2300 字符（按字符计，中英文同口径）。超出先搬家（挪到笔记或 README）、再压缩；确需更多才改这个数字，并在提交说明里给理由。
+本文件预算 ≤ 2600 字符（按字符计，中英文同口径）。超出先搬家（挪到笔记或 README）、再压缩；确需更多才改这个数字，并在提交说明里给理由。
 
 ## Agent Notes
 
