@@ -1,0 +1,24 @@
+name: build, test and agent-notes gate
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        node: [22, 24]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      # no lockfile in repo (upstream gitignores it) → npm install, no cache
+      - run: npm install --no-audit --no-fund
+      # empty setenv: integration suites skip, mock suites run
+      - run: node -e "require('fs').writeFileSync('setenv.js','')"
+      - run: npm run build
+      - run: npm test
+      - run: npm run verify:agents

@@ -1,6 +1,6 @@
 {
   "name": "@lingc-sun/abap-adt-api",
-  "version": "8.4.3",
+  "version": "8.4.4",
   "description": "Interface to Abap Developer Tools webservice",
   "publishConfig": {
     "name": "@lingc-sun/abap-adt-api",
@@ -14,7 +14,8 @@
     "build": "tsc",
     "watch": "tsc -w",
     "prepublishOnly": "tsc",
-    "test": "jest"
+    "test": "jest",
+    "verify:agents": "node scripts/verify-agents.mjs"
   },
   "keywords": [
     "ABAP",
