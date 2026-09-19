@@ -19,6 +19,7 @@ npm test        # jest；未配置 ADT_URL 时集成测试自动跳过
 
 - **Fork 补丁少而聚焦**：一个提交只修一个行为缺陷，根因写全在提交信息里，便于上游合入后对冲（[rationale](.agents/notes/implemented/process/2026-09-18-fork-maintenance-policy.md)）。
 - **版本号跟随上游 tag**（8.4.x）：依赖范围永远可读为"上游某版 + fork 补丁"；merge 上游后必须重验 fork 补丁仍然生效（[rationale](.agents/notes/implemented/process/2026-09-18-fork-maintenance-policy.md)）。
+- **commit 分两类**：可上游（不含 scoped 包名与 agent 语料、能并入上游库）与 fork 专属（`(fork)` scope + `Fork-only: yes` 尾注）；可上游在前、fork 专属在后，`for-upstream` 指向可上游段顶端，发上游 PR 从它出发（[rationale](.agents/notes/implemented/process/2026-09-19-fork-upstream-commit-discipline.md)）。
 
 ## Conventions
 
@@ -28,7 +29,7 @@ npm test        # jest；未配置 ADT_URL 时集成测试自动跳过
 - 类型 PascalCase 无 `I` 前缀；不用 enum，用 const 对象或 union。
 - 测试细则（setenv.js 模板、runTest 助手、testdata 样本、破坏性测试开关）见 [README Testing](README.md#testing)。
 
-本文件预算 ≤ 2000 字符（按字符计，中英文同口径）。超出先搬家（挪到笔记或 README）、再压缩；确需更多才改这个数字，并在提交说明里给理由。
+本文件预算 ≤ 2300 字符（按字符计，中英文同口径）。超出先搬家（挪到笔记或 README）、再压缩；确需更多才改这个数字，并在提交说明里给理由。
 
 ## Agent Notes
 
