@@ -279,6 +279,14 @@ test(
   })
 )
 
+test("objectPath substitutes the parent into group creation paths", () => {
+  expect(objectPath("FUGR/FF", "zapidummy", "ZGROUPNAME")).toBe(
+    "/sap/bc/adt/functions/groups/ZGROUPNAME/fmodules/zapidummy"
+  )
+  expect(objectPath("FUGR/I", "zapidummy", "ZGROUPNAME")).toBe(
+    "/sap/bc/adt/functions/groups/ZGROUPNAME/includes/zapidummy"
+  )
+})
 test(
   "objectPath and transport",
   runTest(async (c: ADTClient) => {
