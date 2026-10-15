@@ -1,4 +1,4 @@
-[![npm](https://img.shields.io/npm/v/abap-adt-api?label=abap-adt-api)](https://www.npmjs.com/package/abap-adt-api)
+[![npm](https://img.shields.io/npm/v/@lingc-sun/abap-adt-api?label=%40lingc-sun%2Fabap-adt-api)](https://www.npmjs.com/package/@lingc-sun/abap-adt-api)
 
 # ADT - Abap Developer Tools client
 
@@ -6,21 +6,40 @@ This library simplifies access to the ADT REST interface.
 
 Supports a good share of what Eclipse tools can do with a simple JS/TS interface.
 
-Designed for general use, mostly used in [ABAP remote filesystem extension for visual studio code](https://github.com/marcellourbani/vscode_abap_remote_fs)
+Designed for general use, mostly used in [ABAP remote filesystem extension for visual studio code](https://github.com/marcellourbani/vscode_abap_remote_fs).
+
+This is a fork of [marcellourbani/abap-adt-api](https://github.com/marcellourbani/abap-adt-api), published as [`@lingc-sun/abap-adt-api`](https://www.npmjs.com/package/@lingc-sun/abap-adt-api). Version numbers track the upstream tag they are based on (`8.4.x` = upstream `8.4` + fork patches), so the dependency range always reads as "some upstream version plus focused fixes". The fork exists mainly to serve [`mcp-abap-adt`](https://github.com/lingcSun/mcp-abap-adt), an MCP server exposing ABAP ADT development workflows to LLM clients.
+
+## Installation
+
+```sh
+npm install @lingc-sun/abap-adt-api
+```
+
+If you don't need the fork patches, the unscoped upstream package `abap-adt-api` is the original.
 
 ## Sample usage
 
 ```typescript
 // create a client object
-import { ADTClient } from "abap-adt-api"
+import { ADTClient } from "@lingc-sun/abap-adt-api"
 const client = new ADTClient(
-  "http://vhcalnplci.bti.local:8000",
+  "https://vhcalnplci.bti.local:44300",
   "developer",
   "mypassword"
 )
 
 const nodes = await client.nodeContents("DEVC/K", "$TMP")
 ```
+
+## Fork changes
+
+Behavioral patches on top of upstream, kept small and focused so they can be upstreamed:
+
+- Session-expiry `POST`s automatically re-login instead of failing; `login()` returns the login response.
+- ICM error pages (HTML error bodies) are no longer misclassified as session expiry.
+- `dumps` feed: query parameters fixed, XML entity expansion budgeted, defensive entry parsing.
+- cloudFoundry suite no longer hard-crashes when `ADT_CP` is unset.
 
 ## Testing
 
