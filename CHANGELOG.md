@@ -1,5 +1,14 @@
 # Change Log
 
+## 8.4.5 [2026-10-15]
+
+### Fixed
+
+- removed the `sprintf-js` dependency (GHSA-hp3w-g68c-fv3c, moderate DoS, no
+  fixed release upstream). `objectcreator` substitutes the single `%s` of its
+  static creation-path templates locally now; behavior is unchanged and
+  covered by new unit tests.
+
 ## 5.2.0 [2023-11-06]
 
 ### Added

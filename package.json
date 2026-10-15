@@ -1,6 +1,6 @@
 {
   "name": "@lingc-sun/abap-adt-api",
-  "version": "8.4.4",
+  "version": "8.4.5",
   "description": "Interface to Abap Developer Tools webservice",
   "publishConfig": {
     "name": "@lingc-sun/abap-adt-api",
